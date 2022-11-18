@@ -18,4 +18,25 @@ describe('effect', () => {
         num2.age++
         expect(num1).toBe(6)
     })
+    it('effectScheduler', () => {
+        const person = reactive({ age: 18 })
+        let run
+        const scheduler = jest.fn(() => {
+            run = runner
+        })
+        let age
+        // 执行runner 会执行传入的函数
+       const runner = effect(() => {
+            age = person.age
+            return 'hello'
+       }, { scheduler } )
+       expect(scheduler).not.toHaveBeenCalled()
+        expect(age).toBe(18)
+        person.age++
+        expect(scheduler).toHaveBeenCalledTimes(1)
+        const r = runner()
+        expect(r).toBe('hello')
+        // expect(age).toBe(20)
+        // 响应式对象变化后，不会执行fun，会执行scheduler
+    })
 })
