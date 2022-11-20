@@ -22,3 +22,6 @@
  ## 2022-11-21
  完善stop
  写readonly
+ ## 2022-11-20
+ vscode 文件查找 批量替换 自动导入
+ 实现effect stop

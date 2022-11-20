@@ -18,7 +18,6 @@ describe('effect', () => {
         let num1
         let num2 = reactive({ age: 4})
         effect(() => {
-            console.log('我被执行了')
             num1 = num2.age + 1
         })
         expect(num1).toBe(5)
@@ -38,7 +37,7 @@ describe('effect', () => {
             age = person.age
             return 'hello'
        }, { scheduler } )
-       expect(scheduler).not.toHaveBeenCalled()
+        expect(scheduler).not.toHaveBeenCalled()
         expect(age).toBe(18)
         person.age++
         expect(scheduler).toHaveBeenCalledTimes(1)
