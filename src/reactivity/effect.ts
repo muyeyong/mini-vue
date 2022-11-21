@@ -1,27 +1,32 @@
-/*
- * @Author: xuyong xuyongshuaige@gmail.com
- * @Date: 2022-11-18 16:56:45
- * @LastEditors: xuyong xuyongshuaige@gmail.com
- * @LastEditTime: 2022-11-18 17:56:48
- * @FilePath: \mini-vue-myself\src\reactivity\effect.ts
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 /* 
     接受一个函数
  */
 
 class Effect {
     private _fn: any 
-    public scheduler: any
-    constructor(fn, { schaeuler}) {
+    public scheduler: Function | undefined
+    public deps = []
+    constructor(fn, { scheduler}) {
         this._fn = fn
-        this.scheduler = schaeuler
+        this.scheduler = scheduler
     }
     run () {
         activeEffect = this
-        this._fn()
-        return this._fn.bind(this)
+        return this._fn()
     }
+    stop () {
+        // clearupEffect
+        // 去除自身的deps里面的dep有什么用了？ 不应该是去除targetMap里面的吗
+        this.deps.forEach((dep: any) => {
+            dep.delete(this)
+        })
+    }
+}
+
+function clearupEffect (effect) {
+    effect.deps.forEach(dep => {
+        dep.delete(effect)
+    });
 }
 
 /* 
@@ -42,6 +47,7 @@ const track = (target, key) => {
         deps.set(key, dep)
     }
     dep.add(activeEffect)
+    activeEffect.deps.push(dep)
 }
 
 /* 触发依赖 */
@@ -49,18 +55,25 @@ const trigger = (target, key) => {
     const deps = targetMap.get(target)
     const dep = deps.get(key)
     for (let f of dep) {
-        console.log('f',f)
         f.scheduler ? f.scheduler() : f.run()
     }
 }
 const effect = (fn, option?) => {
-    console.timeLog('option', option)
-    const insatnce = new Effect(fn, { ...option })
-    return insatnce.run()
+    const _insatnce = new Effect(fn, { ...option })
+    // Object.assign(_insatnce, option)
+    _insatnce.run()
+    const runner: any =  _insatnce.run.bind(_insatnce)
+    runner.effect = _insatnce
+    return runner
+}
+const stop = (runner) => {
+// 通过runner反向查找
+    runner.effect.stop()
 }
 
 export {
     effect,
     track,
-    trigger
+    trigger,
+    stop
 }
