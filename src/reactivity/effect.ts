@@ -5,7 +5,7 @@
 class Effect {
     private _fn: any 
     public scheduler: Function | undefined
-    public deps = []
+    public dep = []
     constructor(fn, { scheduler}) {
         this._fn = fn
         this.scheduler = scheduler
@@ -17,7 +17,7 @@ class Effect {
     stop () {
         // clearupEffect
         // 去除自身的deps里面的dep有什么用了？ 不应该是去除targetMap里面的吗
-        this.deps.forEach((dep: any) => {
+        this.dep.forEach((dep: any) => {
             dep.delete(this)
         })
     }
@@ -47,7 +47,7 @@ const track = (target, key) => {
         deps.set(key, dep)
     }
     dep.add(activeEffect)
-    activeEffect.deps.push(dep)
+    activeEffect.dep.push(dep)
 }
 
 /* 触发依赖 */
