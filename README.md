@@ -32,3 +32,9 @@
  ## 2022-11-25
  实现isReactive isReadonly
  利用Prox的get去判断
+
+
+ ## 2022-11-27
+ 优化stop: 处理active.prop++的异常
+ 实现多层对象的reactive readlonly
+ 实现shallowReactive shallowReadonly

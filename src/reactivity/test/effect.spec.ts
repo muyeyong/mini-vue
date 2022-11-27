@@ -47,9 +47,9 @@ describe('effect', () => {
         obj.prop = 2;
         expect(dummy).toBe(2);
         stop(runner);
-        // obj.prop = 3
-        //TODO 需要处理 obj.prop++ 会触发get方法
-        obj.prop = 3;
+        //DOWN 需要处理 obj.prop++ 会触发get方法
+        // obj.prop = 3;
+        obj.prop++
         expect(dummy).toBe(2);
         // stopped effect should still be manually callable
         runner();

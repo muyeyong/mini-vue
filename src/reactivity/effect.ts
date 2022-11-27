@@ -3,10 +3,12 @@
  */
 
 import { extend } from "../shared"
+let activeEffect
 
 class Effect {
     private _fn: any 
     public deps = []
+    public active = true
     constructor(fn) {
         this._fn = fn
     }
@@ -17,7 +19,10 @@ class Effect {
     stop () {
         // clearupEffect
         // 去除自身的deps里面的dep有什么用了？ 不应该是去除targetMap里面的吗 指向同一个对象
-        clearupEffect(this)
+        if (this.active) {
+            clearupEffect(this)
+            this.active = false
+        }
     }
 }
 
@@ -32,9 +37,11 @@ function clearupEffect (effect) {
 追踪依赖 
 使用set =〉 key value的方式存储
 */
-let activeEffect
+
 const targetMap = new Map()
 const track = (target, key) => {
+    // 如果单纯创建一个reactive对象
+    if (!activeEffect || !activeEffect.active) return
     let deps = targetMap.get(target)
     if (!deps) {
         deps = new Map()
@@ -45,7 +52,8 @@ const track = (target, key) => {
         dep = new Set()
         deps.set(key, dep)
     }
-     // TODO 被触发了很多次，如果存在就不要触发
+     // DOWN 被触发了很多次，如果存在就不要触发
+    if (dep.has(activeEffect)) return
     dep.add(activeEffect)
     activeEffect.deps.push(dep)
 }

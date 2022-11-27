@@ -19,4 +19,16 @@ describe('reactive', () => {
         expect(isReactive(origin)).toBe(false)
         expect(isReactive(wrap)).toBe(true)
     })
+    it('nested reactive', () => {
+        const origin = { 
+            people: {
+                age: 18
+            },
+            list: [ { a: 4 }]
+         }
+         const wrap = reactive(origin)
+         expect(isReactive(wrap.people)).toBe(true)
+        //  expect(isReactive(wrap.people.age)).toBe(true)
+        //  expect(isReactive(wrap.list[0])).toBe(true)
+    })
 })
