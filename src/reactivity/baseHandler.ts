@@ -57,6 +57,10 @@ const shallowReadonlyMutableHandler = extend({}, readonlyMutableHandler, {
     get: shallowGet
 })
 
+const shallowReactiveMutableHandler = extend({}, mutableHandler, {
+    get: shallowGet
+} )
+
 export {
     mutableHandler,
     readonlyMutableHandler,
