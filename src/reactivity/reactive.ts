@@ -12,7 +12,7 @@
     触发依赖
  */
 
-import { mutableHandler, readonlyMutableHandler } from './baseHandler'
+import { mutableHandler, readonlyMutableHandler, shallowReadonlyMutableHandler } from './baseHandler'
 
 export enum ReactiveFlags {
     isReactive = '__v_is_reactive',
@@ -31,6 +31,10 @@ const isReadonly = (value) => {
     return !!value[ReactiveFlags.isReadonly]
 }
 
+const shallowReadonly = (raw) => {
+    return createReactiveObj(raw, shallowReadonlyMutableHandler)
+}
+
 const isReactive = (value) => {
     return !!value[ReactiveFlags.isReactive]
 }
@@ -42,5 +46,6 @@ export {
     reactive,
     readonly,
     isReadonly,
-    isReactive
+    isReactive,
+    shallowReadonly
 }

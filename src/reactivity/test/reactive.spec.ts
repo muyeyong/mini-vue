@@ -2,7 +2,7 @@
  * @Author: xuyong xuyongshuaige@gmail.com
  * @Date: 2022-11-18 16:56:45
  * @LastEditors: xuyong xuyongshuaige@gmail.com
- * @LastEditTime: 2022-11-25 17:05:11
+ * @LastEditTime: 2022-11-28 09:12:45
  * @FilePath: \mini-vue-myself\src\reactivity\test\reactive.spec.ts
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -28,7 +28,6 @@ describe('reactive', () => {
          }
          const wrap = reactive(origin)
          expect(isReactive(wrap.people)).toBe(true)
-        //  expect(isReactive(wrap.people.age)).toBe(true)
-        //  expect(isReactive(wrap.list[0])).toBe(true)
+         expect(isReactive(wrap.list[0])).toBe(true)
     })
 })
