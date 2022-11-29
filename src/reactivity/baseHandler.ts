@@ -64,5 +64,6 @@ const shallowReactiveMutableHandler = extend({}, mutableHandler, {
 export {
     mutableHandler,
     readonlyMutableHandler,
-    shallowReadonlyMutableHandler
+    shallowReadonlyMutableHandler,
+    shallowReactiveMutableHandler
 }
