@@ -24,7 +24,6 @@ const createGetter = (isReadonly = false, shallow = false) => {
         if (isObject(res) && !shallow) {
             return isReadonly? readonly(res) : reactive(res)
         }
-        console.log('reactive get')
         return res
     }
 }

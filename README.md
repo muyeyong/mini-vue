@@ -2,7 +2,7 @@
  * @Author: xuyong xuyongshuaige@gmail.com
  * @Date: 2022-11-18 16:56:45
  * @LastEditors: xuyong xuyongshuaige@gmail.com
- * @LastEditTime: 2022-11-29 11:03:34
+ * @LastEditTime: 2022-11-30 09:26:38
  * @FilePath: \mini-vue-myself\README.md
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -44,3 +44,6 @@
   完成了ref
   思考的地方：
     ref传入一个对象，借助reactive实现，出发了两个get，这里是不是可以优化
+
+ ## 2022-11-30
+    完成isRef 和 unRef
