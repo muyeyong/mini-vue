@@ -1,5 +1,5 @@
 import { effect } from "../effect"
-import { isRef, ref, unRef } from "../ref"
+import { isRef, proxyRefs, ref, unRef } from "../ref"
 
 describe('ref', () => {
     it('happy path', () => {
@@ -46,5 +46,17 @@ describe('ref', () => {
         expect(unRef(a)).toBe(3)
         expect(a.value).toBe(3)
         expect(unRef(2)).toBe(2)
+    }),
+    it('proxyRefs', () => {
+        const origin = {
+            a: ref(1),
+            b: 2
+        }
+        const proxyOrigin = proxyRefs(origin)
+        expect(proxyOrigin.a).toBe(1)
+        expect(proxyOrigin.b).toBe(2) 
+        // 重新赋值
+        proxyOrigin.a = 5
+        expect(proxyOrigin.a).toBe(5)
     })
 })

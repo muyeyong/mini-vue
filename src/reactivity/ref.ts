@@ -53,3 +53,40 @@ export const isRef = (value) => {
 export const unRef = (value) => {
    return isRef(value) ? value.value : value
 }
+
+export const proxyRefs = (obj) => {
+    // 需要劫持对象的get set
+    // TODO 为什么set get 操作不全部用Reflect
+   return new Proxy(obj, {
+        get(target, key) {
+            // 如果这个值是ref
+        //    const res = Reflect.get(target, key)
+        //    if (isRef(res)) {
+        //     return res.value
+        //    } else {
+        //     return res
+        //    }
+        return unRef(Reflect.get(target, key))
+        },
+        set(target, key, value) {
+            // value也需要判断
+            const res = Reflect.get(target, key)
+            // if (isRef(res)) {
+            //     // 不需要判断是不是响应式对象吗
+            //     if (isRef(value)) {
+            //        Reflect.set(target, key, value)
+            //     } else {
+            //         Reflect.set(res, 'value', value)
+            //     }
+            // } else {
+            //     Reflect.set(target, key, value)
+            // }
+            // return true
+            if (isRef(res) && !isRef(value)) {
+                return target[key].value = value
+            } else {
+                return Reflect.set(target, key, value)
+            }
+        }
+    })
+}
