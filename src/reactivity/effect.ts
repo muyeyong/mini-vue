@@ -34,10 +34,10 @@ class Effect {
         return res
     }
     stop () {
-        // clearupEffect
+        // cleanupEffect
         // 去除自身的deps里面的dep有什么用了？ 不应该是去除targetMap里面的吗 指向同一个对象
         if (this.active) {
-            clearupEffect(this)
+            cleanupEffect(this)
             if (this.onStop) {
                 this.onStop()
             }
@@ -46,7 +46,7 @@ class Effect {
     }
 }
 
-function clearupEffect (effect) {
+function cleanupEffect (effect) {
     if (effect.onStop) effect.onStop()
     effect.deps.forEach(dep => {
         dep.delete(effect)
@@ -95,11 +95,11 @@ const triggerEffect = (dep) => {
     }
 }
 const effect = (fn, option?) => {
-    const _insatance = new Effect(fn)
-    extend(_insatance, option)
-    _insatance.run()
-    const runner: any =  _insatance.run.bind(_insatance)
-    runner.effect = _insatance
+    const _instance = new Effect(fn)
+    extend(_instance, option)
+    _instance.run()
+    const runner: any =  _instance.run.bind(_instance)
+    runner.effect = _instance
     return runner
 }
 const stop = (runner) => {

@@ -12,6 +12,16 @@ describe('computed', () => {
         // expect(age.value).toBe(20)
     }),
     it('lazily', () => {
+        const people = reactive({ age: 8 })
+        const getter = jest.fn(() => {
+            return people.age
+        })
+        const cValue = computed(getter)
+        expect(getter).not.toHaveBeenCalled()
+        expect(cValue.value).toBe(8)
+        expect(getter).toBeCalledTimes(1)
+        cValue.value
+        expect(getter).toBeCalledTimes(1)
 
     })
 })
