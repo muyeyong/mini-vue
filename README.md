@@ -56,3 +56,6 @@
  ## 2022-12-08
    component主流程
    createApp(App).monut(container), 将app变成虚拟节点，然后path（遍历当前节点以及子节点），解析setup 持久化 render
+
+ ## 2022-12-10
+   完成componet流程
