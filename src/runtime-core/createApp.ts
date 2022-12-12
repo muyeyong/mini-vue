@@ -1,11 +1,11 @@
 import { render } from "./renderer"
-import { craeteVnode } from "./vnode"
+import { createVnode } from "./vnode"
 
 export const createApp = (rootComponent) => {
    return {
     mount(rootContainer) {
         // 操作vnode
-        const vnode = craeteVnode(rootComponent)
+        const vnode = createVnode(rootComponent)
         render(vnode, rootContainer)
     }
    }

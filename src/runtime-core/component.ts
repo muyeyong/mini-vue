@@ -8,10 +8,10 @@ export function createComponentInstance(vnode: any) {
 export function setupComponent(instance: any) {
     // TODO 初始化 props slot
     // 处理setup 
-    setupStatefullComponent(instance)
+    setupStatefulComponent(instance)
 }
 
-function setupStatefullComponent(instance: any) {
+function setupStatefulComponent(instance: any) {
    const { setup } = instance.type
    if (setup) {
         const setupResult = setup()

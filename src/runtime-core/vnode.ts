@@ -1,4 +1,4 @@
-export const craeteVnode = (type, props?, children?) => {
+export const createVnode = (type, props?, children?) => {
     return {
         type,
         props,
