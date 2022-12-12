@@ -12,6 +12,15 @@ export function setupComponent(instance: any) {
 }
 
 function setupStatefulComponent(instance: any) {
+    // 代理对象
+    instance.proxy = new Proxy({}, {
+        get(target, key) {
+            const { setupState } = instance
+            if (key in setupState) {
+                return setupState[key]
+            }
+        }
+    })
    const { setup } = instance.type
    if (setup) {
         const setupResult = setup()

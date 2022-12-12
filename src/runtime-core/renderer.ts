@@ -1,6 +1,5 @@
 import { isObject } from "../shared/index"
 import { createComponentInstance, setupComponent } from "./component"
-import { createVnode } from "./vnode"
 
 export function render(vnode, container) {
     patch(vnode, container)
@@ -42,7 +41,8 @@ function mountComponent(vnode: any, container) {
 }
 
 function setupRenderEffect(instance, container) {
-   const subTree = instance.render()
+    const { proxy } = instance
+   const subTree = instance.render.call(proxy)
    patch(subTree, container)
 }
 

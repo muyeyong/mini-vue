@@ -12,7 +12,7 @@ export const App = {
         // string
         // 'Hello'
         // Array
-        [ h('span', { class: 'blue'}, [h('p', { class: 'red'}, 'p1')]), h('span', { class: 'red'}, 'span2')]
+        [ h('span', { class: 'blue'}, [h('p', { class: 'blue'}, `hello, ${this.msg}`)]), h('span', { class: 'red'}, 'span2')]
        )
     },
     setup (){
