@@ -9,7 +9,7 @@ function patch (vnode, container) {
     if (typeof vnode.type === 'string') {
         const { props, children} = vnode
         // 处理element
-        const el = document.createElement(vnode.type)
+        const el = vnode.el = document.createElement(vnode.type)
         // props
         for(const key in props) {
             el.setAttribute(key, props[key])
@@ -41,8 +41,9 @@ function mountComponent(vnode: any, container) {
 }
 
 function setupRenderEffect(instance, container) {
-    const { proxy } = instance
+   const { proxy } = instance
    const subTree = instance.render.call(proxy)
    patch(subTree, container)
+   instance.vnode.el = subTree.el
 }
 

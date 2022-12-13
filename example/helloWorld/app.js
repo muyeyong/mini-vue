@@ -1,6 +1,7 @@
 import { h } from '../../lib/mini-vue.es.js'
 export const App = {
     render() {
+        window.app = this
         //TODO 第二个参数是props，如果不传 例如h('div', 'hello')，怎么保持hello赋值给children
        return  h(
         'div', 
