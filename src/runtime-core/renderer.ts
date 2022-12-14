@@ -1,4 +1,5 @@
 import { isObject } from "../shared/index"
+import { ShapeFlags } from "../shared/shapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
 
 export function render(vnode, container) {
@@ -6,31 +7,33 @@ export function render(vnode, container) {
 }
 
 function patch (vnode, container) {
-    if (typeof vnode.type === 'string') {
-        const { props, children} = vnode
-        // 处理element
-        const el = vnode.el = document.createElement(vnode.type)
-        // props
-        for(const key in props) {
-            el.setAttribute(key, props[key])
-        }
-        // children
-        if (Array.isArray(children)) {
-           children.forEach(v => {
-            patch(v, el)
-           })
-        } else {
-            el.textContent = children
-        }
-        container.append(el)
-
-    } else if (isObject(vnode.type)) {
+    if ( vnode.shapeFlag & ShapeFlags.ELEMENT) { // element
+        processElement(vnode, container)
+    } else if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) { // component
         // 处理component
-        precessComponent(vnode, container)
+        processComponent(vnode, container)
     }
 }
 
-function precessComponent(vnode: any, container: any) {
+function processElement(vnode: any, container: any) {
+    const { props, children} = vnode
+    // 处理element
+    const el = vnode.el = document.createElement(vnode.type)
+    // props
+    for(const key in props) {
+        el.setAttribute(key, props[key])
+    }
+    // children
+    if (vnode.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+       children.forEach(v => {
+        patch(v, el)
+       })
+    } else {
+        el.textContent = children
+    }
+    container.append(el)
+}
+function processComponent(vnode: any, container: any) {
     mountComponent(vnode, container)
 }
 
