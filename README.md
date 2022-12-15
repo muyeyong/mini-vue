@@ -68,3 +68,6 @@
   shapeFlags --〉 位运算
  ## 2022-12-14
   继续shapeFlags
+ ## 2022-12-15
+  实现注册事件
+  完成props

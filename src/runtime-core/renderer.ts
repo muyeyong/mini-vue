@@ -1,3 +1,4 @@
+import { isReadonly } from "../reactivity/reactive"
 import { isObject } from "../shared/index"
 import { ShapeFlags } from "../shared/shapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
@@ -21,7 +22,13 @@ function processElement(vnode: any, container: any) {
     const el = vnode.el = document.createElement(vnode.type)
     // props
     for(const key in props) {
-        el.setAttribute(key, props[key])
+        const isEvent = str => /^on[A-Z]/.test(str)
+        if (isEvent(key)) {
+            const eventName = key.slice(2).toLocaleLowerCase()
+            el.addEventListener(eventName, props[key])
+        } else {
+            el.setAttribute(key, props[key])
+        }
     }
     // children
     if (vnode.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
