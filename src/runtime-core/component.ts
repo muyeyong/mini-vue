@@ -1,15 +1,18 @@
 import { shallowReadonly } from "../reactivity/reactive"
+import { emit } from "./componentEmit"
 import { initProps } from "./componentProps"
 import { publicInstanceProxyHandler } from "./publicComponentInstance"
-import { createVnode } from "./vnode"
 
 export function createComponentInstance(vnode: any) {
-    return {
+   const instance =  {
         vnode,
         props: {},
         setupState: {},
-        type: vnode.type
+        type: vnode.type,
+        emit: () => {}
     }
+    instance.emit = emit.bind(null, instance) as any
+    return instance
 }
 
 export function setupComponent(instance: any) {
@@ -25,7 +28,9 @@ function setupStatefulComponent(instance: any) {
    const { setup } = instance.type
    if (setup) {
         //TODO 也不能全部传入吧，排除css property、event... & props需要用readonly包一下
-        const setupResult = setup(shallowReadonly(instance.props))
+        const setupResult = setup(shallowReadonly(instance.props), {
+            emit: instance.emit
+        })
         handleSetupResult(instance, setupResult)
    }
 }
