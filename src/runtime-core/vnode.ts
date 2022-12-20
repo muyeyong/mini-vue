@@ -7,12 +7,22 @@ export const createVnode = (type, props?, children?) => {
         props,
         children,
         shapeFlag: getShapeFlag(type),
-        el: null
+        el: null,
     }
     if (typeof children === 'string') {
         vnode.shapeFlag |= ShapeFlags.TEXT_CHILDREN
     } else if (Array.isArray(children)) {
         vnode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN
+    }
+
+    // component + chuildren is Array
+    if (
+        (ShapeFlags.STATEFUL_COMPONENT & vnode.shapeFlag) && 
+        (isObject(vnode.children))
+    ) {
+       
+        vnode.shapeFlag |= ShapeFlags.SLOAT_CHILDREN
+        console.log('vnode', vnode.shapeFlag & ShapeFlags.SLOAT_CHILDREN)
     }
     return vnode
 }
