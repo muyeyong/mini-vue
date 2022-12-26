@@ -76,5 +76,8 @@
 
  ## 2022-12-19
   实现slot ==》 将children放到组件内部
-  具名插槽
-  作用域插槽
+  具名插槽: 使用键值对(插槽名: 插槽(需要渲染的)) { slot: h('div', {}, 'iam slat')}
+  作用域插槽: { slot: (props) => h('div', {}, props)}
+ ## 2022-12-26
+  type ==> 新增Fragment、Text类型，减少渲染dom的层级
+  renderSlots 只需要渲染children就好了

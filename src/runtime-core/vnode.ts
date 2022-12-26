@@ -1,6 +1,9 @@
 import { isObject } from "../shared/index"
 import { ShapeFlags } from "../shared/shapeFlags"
 
+export const Fragment = Symbol('Fragment')
+export const Text = Symbol('Text')
+
 export const createVnode = (type, props?, children?) => {
      const vnode =  {
         type,
@@ -15,16 +18,19 @@ export const createVnode = (type, props?, children?) => {
         vnode.shapeFlag |= ShapeFlags.ARRAY_CHILDREN
     }
 
-    // component + chuildren is Array
+    // component + children is Array
     if (
         (ShapeFlags.STATEFUL_COMPONENT & vnode.shapeFlag) && 
         (isObject(vnode.children))
     ) {
        
         vnode.shapeFlag |= ShapeFlags.SLOAT_CHILDREN
-        console.log('vnode', vnode.shapeFlag & ShapeFlags.SLOAT_CHILDREN)
     }
     return vnode
+}
+
+export function createTextVnode(children) {
+    return createVnode(Text, {}, children)
 }
 
 function getShapeFlag(type) {

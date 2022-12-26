@@ -1,4 +1,4 @@
-import { h } from '../../lib/mini-vue.es.js'
+import { h, createTextVnode } from '../../lib/mini-vue.es.js'
 import { Foo } from './foo.js'
 export const App = {
     render() {
@@ -14,7 +14,8 @@ export const App = {
             h(Foo, {}, 
                 {
                     footer: ({ age }) => h('div', {}, 'footer' + age),
-                    header: h('div', {}, 'header'),
+                    // children 是数组的话，必须传入虚拟节点
+                    header: h('div', {}, [createTextVnode('header')]),
                 }
             )
         ]
