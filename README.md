@@ -81,3 +81,5 @@
  ## 2022-12-26
   type ==> 新增Fragment、Text类型，减少渲染dom的层级
   renderSlots 只需要渲染children就好了
+ ## 2022-12-27
+  实现inject provide

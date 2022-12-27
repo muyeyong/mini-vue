@@ -3,10 +3,11 @@ import { createComponentInstance, setupComponent } from "./component"
 import { Fragment, Text } from "./vnode";
 
 export function render(vnode, container) {
+    // debugger
     patch(vnode, container)
 }
 
-function patch (vnode, container) {
+function patch (vnode, container, parent?) {
     // 如果vnode不是一个虚拟节点, 处理children: ['1', '2']
     //TODO 需要这样做吗
     /* 
@@ -20,23 +21,23 @@ function patch (vnode, container) {
     const { type } = vnode
     switch (type) {
         case Fragment:
-            processFragment(vnode, container)
+            processFragment(vnode, container, parent)
             break;
         case Text: 
             processText(vnode, container)
             break;
         default:
             if ( vnode.shapeFlag & ShapeFlags.ELEMENT) { 
-                processElement(vnode, container)
+                processElement(vnode, container, parent)
             } else if (vnode.shapeFlag & ShapeFlags.STATEFUL_COMPONENT) { 
-                processComponent(vnode, container)
+                processComponent(vnode, container, parent)
             }
             break;
     }
    
 }
 
-function processElement(vnode: any, container: any) {
+function processElement(vnode: any, container: any, parent) {
     const { props, children} = vnode
     // 处理element
     const el = vnode.el = document.createElement(vnode.type)
@@ -52,26 +53,26 @@ function processElement(vnode: any, container: any) {
     }
     // children
     if (vnode.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
-        mountChildren(vnode, el)
+        mountChildren(vnode, el, parent)
     } else {
         el.textContent = children
     }
     container.append(el)
 }
 
-function mountChildren(vnode: any, container: any) {
+function mountChildren(vnode: any, container: any, parent) {
     vnode.children.forEach(v => {
-        patch(v, container)
+        patch(v, container, parent)
     })
 }
 
 
-function processComponent(vnode: any, container: any) {
-    mountComponent(vnode, container)
+function processComponent(vnode: any, container: any, parent) {
+    mountComponent(vnode, container, parent)
 }
 
-function mountComponent(vnode: any, container) {
-    const instance = createComponentInstance(vnode)
+function mountComponent(vnode: any, container, parent) {
+    const instance = createComponentInstance(vnode, parent)
     setupComponent(instance)
     setupRenderEffect(instance, container)
 }
@@ -79,12 +80,12 @@ function mountComponent(vnode: any, container) {
 function setupRenderEffect(instance, container) {
    const { proxy } = instance
    const subTree = instance.render.call(proxy)
-   patch(subTree, container)
+   patch(subTree, container, instance)
    instance.vnode.el = subTree.el
 }
 
-function processFragment(vnode: any, container: any) {
-    mountChildren(vnode, container)
+function processFragment(vnode: any, container: any, parent) {
+    mountChildren(vnode, container, parent)
 }
 
 function processText(vnode: any, container: any) {

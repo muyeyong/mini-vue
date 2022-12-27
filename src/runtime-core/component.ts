@@ -4,15 +4,20 @@ import { initProps } from "./componentProps"
 import { initSlots } from "./componentSlot"
 import { publicInstanceProxyHandler } from "./publicComponentInstance"
 
-export function createComponentInstance(vnode: any) {
+let currentInstance = null
+
+export function createComponentInstance(vnode: any, parent) {
    const instance =  {
         vnode,
         props: {},
         setupState: {},
         type: vnode.type,
         emit: () => {},
+        provides: parent ? Object.create(parent.provides) : {}, // 原型链指向构造函数,怎么指向
+        parent,
         slots: null
     }
+    console.log(instance.provides, parent?.provides)
     instance.emit = emit.bind(null, instance) as any
     return instance
 }
@@ -30,10 +35,12 @@ function setupStatefulComponent(instance: any) {
     instance.proxy = new Proxy({_: instance}, publicInstanceProxyHandler)
    const { setup } = instance.type
    if (setup) {
+        setCurrentInstance(instance)
         //TODO 也不能全部传入吧，排除css property、event... & props需要用readonly包一下
         const setupResult = setup(shallowReadonly(instance.props), {
             emit: instance.emit
         })
+        setCurrentInstance(null)
         handleSetupResult(instance, setupResult)
    }
 }
@@ -51,3 +58,10 @@ function finishComponent(instance: any) {
     }
 }
 
+function setCurrentInstance(val) {
+    currentInstance = val
+}
+
+export function getCurrentInstance() {
+    return currentInstance
+}
