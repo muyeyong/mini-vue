@@ -17,7 +17,6 @@ export function createComponentInstance(vnode: any, parent) {
         parent,
         slots: null
     }
-    console.log(instance.provides, parent?.provides)
     instance.emit = emit.bind(null, instance) as any
     return instance
 }
