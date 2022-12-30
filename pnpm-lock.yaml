@@ -4,20 +4,26 @@ specifiers:
   '@babel/core': ^7.20.2
   '@babel/preset-env': ^7.20.2
   '@babel/preset-typescript': ^7.18.6
+  '@rollup/plugin-typescript': ^10.0.1
   '@types/jest': ^29.2.3
   babel-jest: ^29.3.1
   jest: ^29.3.1
+  rollup: ^3.7.2
   ts-jest: ^29.0.3
+  tslib: ^2.4.1
   typescript: ^4.9.3
 
 devDependencies:
   '@babel/core': 7.20.2
   '@babel/preset-env': 7.20.2_@babel+core@7.20.2
   '@babel/preset-typescript': 7.18.6_@babel+core@7.20.2
+  '@rollup/plugin-typescript': 10.0.1_jan7d5tuik2ty6vcf3j6igsrl4
   '@types/jest': 29.2.3
   babel-jest: 29.3.1_@babel+core@7.20.2
   jest: 29.3.1
+  rollup: 3.9.0
   ts-jest: 29.0.3_cg5lxadyxwsb5nynmvaj7nmpa4
+  tslib: 2.4.1
   typescript: 4.9.3
 
 packages:
@@ -132,6 +138,22 @@ packages:
     dev: true
 
   /@babel/helper-define-polyfill-provide/0.3.3_@babel+core@7.20.2:
+    resolution: {integrity: sha512-z5aQKU4IzbqCC1XH0nAqfsFLMVSo22SBKUc0BxGrLkolTdPTructy0ToNnlO2zA4j9Q/7pjMZf0DSY+DSTYzww==}
+    peerDependencies:
+      '@babel/core': ^7.4.0-0
+    dependencies:
+      '@babel/core': 7.20.2
+      '@babel/helper-compilation-targets': 7.20.0_@babel+core@7.20.2
+      '@babel/helper-plugin-utils': 7.20.2
+      debug: 4.3.4
+      lodash.debounce: 4.0.8
+      resolve: 1.22.1
+      semver: 6.3.0
+    transitivePeerDependencies:
+      - supports-color
+    dev: true
+
+  /@babel/helper-define-polyfill-provider/0.3.3_@babel+core@7.20.2:
     resolution: {integrity: sha512-z5aQKU4IzbqCC1XH0nAqfsFLMVSo22SBKUc0BxGrLkolTdPTructy0ToNnlO2zA4j9Q/7pjMZf0DSY+DSTYzww==}
     peerDependencies:
       '@babel/core': ^7.4.0-0
@@ -1504,6 +1526,41 @@ packages:
       '@jridgewell/sourcemap-codec': 1.4.14
     dev: true
 
+  /@rollup/plugin-typescript/10.0.1_jan7d5tuik2ty6vcf3j6igsrl4:
+    resolution: {integrity: sha512-wBykxRLlX7EzL8BmUqMqk5zpx2onnmRMSw/l9M1sVfkJvdwfxogZQVNUM9gVMJbjRLDR5H6U0OMOrlDGmIV45A==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^2.14.0||^3.0.0
+      tslib: '*'
+      typescript: '>=3.7.0'
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+      tslib:
+        optional: true
+    dependencies:
+      '@rollup/pluginutils': 5.0.2_rollup@3.9.0
+      resolve: 1.22.1
+      rollup: 3.9.0
+      tslib: 2.4.1
+      typescript: 4.9.3
+    dev: true
+
+  /@rollup/pluginutils/5.0.2_rollup@3.9.0:
+    resolution: {integrity: sha512-pTd9rIsP92h+B6wWwFbW8RkZv4hiR/xKsqre4SIuAOaOEQRxi0lqLke9k2/7WegC85GgUs9pjmOjCUi3In4vwA==}
+    engines: {node: '>=14.0.0'}
+    peerDependencies:
+      rollup: ^1.20.0||^2.0.0||^3.0.0
+    peerDependenciesMeta:
+      rollup:
+        optional: true
+    dependencies:
+      '@types/estree': 1.0.0
+      estree-walker: 2.0.2
+      picomatch: 2.3.1
+      rollup: 3.9.0
+    dev: true
+
   /@sinclair/typebox/0.24.51:
     resolution: {integrity: sha512-1P1OROm/rdubP5aFDSZQILU0vrLCJ4fvHt6EoqHEM+2D/G5MK3bIaymUKLit8Js9gbns5UyJnkP/TZROLw4tUA==}
     dev: true
@@ -1547,6 +1604,10 @@ packages:
     resolution: {integrity: sha512-FcFaxOr2V5KZCviw1TnutEMVUVsGt4D2hP1TAfXZAMKuHYW3xQhe3jTxNPWutgCJ3/X1c5yX8ZoGVEItxKbwBg==}
     dependencies:
       '@babel/types': 7.20.2
+    dev: true
+
+  /@types/estree/1.0.0:
+    resolution: {integrity: sha512-WulqXMDUTYAXCjZnk6JtIHPigp55cVtDgDrO2gHRwhyJto21+1zbVCtOYB2L1F9w4qCQ0rOGWBnBe0FNTiEJIQ==}
     dev: true
 
   /@types/graceful-fs/4.1.5:
@@ -1694,6 +1755,7 @@ packages:
       '@babel/compat-data': 7.20.1
       '@babel/core': 7.20.2
       '@babel/helper-define-polyfill-provide': 0.3.3_@babel+core@7.20.2
+      '@babel/helper-define-polyfill-provider': 0.3.3_@babel+core@7.20.2
       semver: 6.3.0
     transitivePeerDependencies:
       - supports-color
@@ -1706,6 +1768,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.2
       '@babel/helper-define-polyfill-provide': 0.3.3_@babel+core@7.20.2
+      '@babel/helper-define-polyfill-provider': 0.3.3_@babel+core@7.20.2
       core-js-compat: 3.26.1
     transitivePeerDependencies:
       - supports-color
@@ -1718,6 +1781,7 @@ packages:
     dependencies:
       '@babel/core': 7.20.2
       '@babel/helper-define-polyfill-provide': 0.3.3_@babel+core@7.20.2
+      '@babel/helper-define-polyfill-provider': 0.3.3_@babel+core@7.20.2
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -1984,6 +2048,10 @@ packages:
     resolution: {integrity: sha512-eGuFFw7Upda+g4p+QHvnW0RyTX/SVeJBDM/gCtMARO0cLuT2HcEKnTPvhjV6aGeqrCB/sbNop0Kszm0jsaWU4A==}
     engines: {node: '>=4'}
     hasBin: true
+    dev: true
+
+  /estree-walker/2.0.2:
+    resolution: {integrity: sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==}
     dev: true
 
   /esutils/2.0.3:
@@ -3003,6 +3071,14 @@ packages:
       supports-preserve-symlinks-flag: 1.0.0
     dev: true
 
+  /rollup/3.9.0:
+    resolution: {integrity: sha512-nGGylpmblyjTpF4lEUPgmOw6OVxRvnI6Iuuh6Lz4O/X66cVOX1XJSsqP1YamxQ+mPuFE7qJxLFDSCk8rNv5dDw==}
+    engines: {node: '>=14.18.0', npm: '>=8.0.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
   /semver/6.3.0:
     resolution: {integrity: sha512-b39TBaTSfV6yBrapU89p5fKekE2m/NwnDocOVruQFS1/veMgdzuPcnOM34M6CwxW8jH/lxEa5rBoDeUwu5HHTw==}
     hasBin: true
@@ -3187,6 +3263,10 @@ packages:
       semver: 7.3.8
       typescript: 4.9.3
       yargs-parser: 21.1.1
+    dev: true
+
+  /tslib/2.4.1:
+    resolution: {integrity: sha512-tGyy4dAjRIEwI7BzsB0lynWgOpfqjUdq91XXAlIWD2OwKBH7oCl/GZG/HT4BOHrTlPMOASlMQ7veyTqpmRcrNA==}
     dev: true
 
   /type-detect/4.0.8:

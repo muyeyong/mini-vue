@@ -60,13 +60,13 @@ export const proxyRefs = (obj) => {
    return new Proxy(obj, {
         get(target, key) {
             // 如果这个值是ref
-        //    const res = Reflect.get(target, key)
-        //    if (isRef(res)) {
-        //     return res.value
-        //    } else {
-        //     return res
-        //    }
-        return unRef(Reflect.get(target, key))
+            //    const res = Reflect.get(target, key)
+            //    if (isRef(res)) {
+            //     return res.value
+            //    } else {
+            //     return res
+            //    }
+            return unRef(Reflect.get(target, key))
         },
         set(target, key, value) {
             // value也需要判断

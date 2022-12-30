@@ -1,3 +1,4 @@
+import { proxyRefs } from "../reactivity"
 import { shallowReadonly } from "../reactivity/reactive"
 import { emit } from "./componentEmit"
 import { initProps } from "./componentProps"
@@ -15,7 +16,9 @@ export function createComponentInstance(vnode: any, parent) {
         emit: () => {},
         provides: parent ? Object.create(parent.provides) : {}, // 原型链指向构造函数,怎么指向
         parent,
-        slots: null
+        slots: null,
+        isMounted: false,
+        subTree: null
     }
     instance.emit = emit.bind(null, instance) as any
     return instance
@@ -45,7 +48,7 @@ function setupStatefulComponent(instance: any) {
 }
 function handleSetupResult(instance: any, setupResult: any) {
    if (typeof setupResult === 'object') {
-        instance.setupState = setupResult
+        instance.setupState = proxyRefs(setupResult) 
    }
    finishComponent(instance)
 }

@@ -8,7 +8,7 @@ import { createRenderer } from '../runtime-core'
     container.append(el)
 }
 
- function patchProps(el ,key, value) {
+ function patchProp(el ,key, value) {
      const isEvent = str => /^on[A-Z]/.test(str)
      if (isEvent(key)) {
             const eventName = key.slice(2).toLocaleLowerCase()
@@ -18,7 +18,7 @@ import { createRenderer } from '../runtime-core'
      }
 }
 
-const render: any = createRenderer({ createElement, insert, patchProps})
+const render: any = createRenderer({ createElement, insert, patchProp})
 
 
 export function createApp(...args) {
