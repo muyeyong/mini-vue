@@ -5,7 +5,7 @@ import { createAppAPI } from "./createApp";
 import { Fragment, Text } from "./vnode";
 
 export function createRenderer (options) {
-    const { createElement, insert, patchProp} = options
+    const { createElement: hostCreateElement, insert: hostInsert, patchProp: hostPatchProp} = options
     
     function render(vnode, container) {
         patch(null, vnode, container)
@@ -51,10 +51,10 @@ export function createRenderer (options) {
     function mountElement(vnode, container) {
         const { props, children} = vnode
         // 处理element
-        const el = vnode.el = createElement(vnode.type) // document.createElement(vnode.type)
+        const el = vnode.el = hostCreateElement(vnode.type) 
         // props
         for(const key in props) {
-            patchProp(el, key, props[key])
+            hostPatchProp(el, key, props[key])
         }
         // children
         if (vnode.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
@@ -62,12 +62,27 @@ export function createRenderer (options) {
         } else {
             el.textContent = children
         }
-        //TODO insert()
-        insert(el, container)
+        //TODO hostInsert()
+        hostInsert(el, container)
     }
 
     function patchElement(n1, n2, container) {
+
         console.log(n1, n2)
+        const oldProps = n1.props
+        const newProps = n2.props
+        patchProps(oldProps, newProps, n2)
+    }
+
+    function patchProps(oldProps, newProps, el) {
+        //TODO 暂不支持 新增props
+        // 修改props
+        for(const key in newProps) {
+            if (oldProps[key] !== newProps[key]) {
+                hostPatchProp(el, key, newProps[key])
+            }
+        }
+        // 删除props
     }
 
     function mountChildren(vnode: any, container: any, parent) {

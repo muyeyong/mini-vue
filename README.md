@@ -90,3 +90,7 @@
  ## 2022-12-30
   实现vnode更新
   TODO 单测怎么跑不起来了
+
+ ## 2023-01-03
+   实现props更新
+   看children的对比视频： text <--> array ？
