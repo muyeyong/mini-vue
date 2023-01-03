@@ -71,7 +71,8 @@ export function createRenderer (options) {
         console.log(n1, n2)
         const oldProps = n1.props
         const newProps = n2.props
-        patchProps(oldProps, newProps, n2)
+        const el = n2.el = n1.el 
+        patchProps(oldProps, newProps, el)
     }
 
     function patchProps(oldProps, newProps, el) {
