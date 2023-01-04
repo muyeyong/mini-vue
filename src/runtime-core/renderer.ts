@@ -42,13 +42,13 @@ export function createRenderer (options) {
 
     function processElement(n1, n2: any, container: any, parent) {
         if (!n1) {
-            mountElement(n2, container)
+            mountElement(n2, container, parent)
         } else {
             patchElement(n1, n2, container)
         }
     }
 
-    function mountElement(vnode, container) {
+    function mountElement(vnode, container, parent) {
         const { props, children} = vnode
         // 处理element
         const el = vnode.el = hostCreateElement(vnode.type) 
