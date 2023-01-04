@@ -16,9 +16,9 @@ export const App = {
             [ 
                 h('span', { class: 'blue'}, [h('p', { class: 'blue'}, `hello, ${this.count}`)]), 
                 h('button', { class: 'red', onClick: this.addCount }, '点击修改count'),
-                h('button', { onClick: this.changePropsDemo1 }, '修改props'),
-                h('button', { onChick: this.changePropsDemo2 }, '删除props'),
-                h('button', { onChick: this.changePropsDemo3 }, '新增props')
+                h('button', { onClick: this.changePropsDemo1 }, '修改props为新的值'),
+                h('button', { onClick: this.changePropsDemo2 }, '修改props bar为undefined || null'),
+                h('button', { onClick: this.changePropsDemo3 }, '删除props 的bar')
             ]
         )
     },
@@ -43,8 +43,8 @@ export const App = {
         }
 
         const changePropsDemo3 = () => {
-            //TODO 新增 还不支持
-            props.value.newOther = 'newOther'
+            // 新增 修改
+            props.value = { foo: 'new1-foo', name: 'add'}
         }
         return {count, addCount, props, changePropsDemo1, changePropsDemo2, changePropsDemo3}
     }   

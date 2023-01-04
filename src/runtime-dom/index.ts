@@ -14,7 +14,12 @@ import { createRenderer } from '../runtime-core'
             const eventName = key.slice(2).toLocaleLowerCase()
             el.addEventListener(eventName, value)
         } else {
-            el.setAttribute(key, value)
+            if (value === undefined || value === null) {
+                el.removeAttribute(key)
+            } else {
+                el.setAttribute(key, value)
+            }
+            
      }
 }
 

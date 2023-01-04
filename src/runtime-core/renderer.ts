@@ -67,8 +67,6 @@ export function createRenderer (options) {
     }
 
     function patchElement(n1, n2, container) {
-
-        console.log(n1, n2)
         const oldProps = n1.props
         const newProps = n2.props
         const el = n2.el = n1.el 
@@ -76,14 +74,20 @@ export function createRenderer (options) {
     }
 
     function patchProps(oldProps, newProps, el) {
-        //TODO 暂不支持 新增props
-        // 修改props
-        for(const key in newProps) {
-            if (oldProps[key] !== newProps[key]) {
-                hostPatchProp(el, key, newProps[key])
+        if (oldProps !== newProps) {
+            for(const key in newProps) {
+                if (oldProps[key] !== newProps[key]) {
+                    hostPatchProp(el, key, newProps[key])
+                }
+            }
+    
+            for(const key in oldProps) {
+                if (!(key in newProps)) {
+                    hostPatchProp(el, key, null)
+                }
             }
         }
-        // 删除props
+       
     }
 
     function mountChildren(vnode: any, container: any, parent) {
