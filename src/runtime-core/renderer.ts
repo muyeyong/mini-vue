@@ -66,7 +66,8 @@ export function createRenderer (options) {
         if (vnode.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
             mountChildren(vnode, el, parent)
         } else {
-            el.textContent = children
+            // el.textContent = children
+            hostSetElementText(el, children)
         }
         //TODO hostInsert()
         hostInsert(el, container)
@@ -107,6 +108,8 @@ export function createRenderer (options) {
                 unmountChildren(n1)
                 //2. 添加n2 children
                 hostSetElementText(container, n2.children)
+            } else {
+                patchKeyedChildren(n1, n2, container, parent)
             }
         } else if (n1.shapeFlag & ShapeFlags.TEXT_CHILDREN) {
             if (n2.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
@@ -120,7 +123,6 @@ export function createRenderer (options) {
                 }
             }
         }
-
     }
 
     function unmountChildren(vnode) {
@@ -128,6 +130,56 @@ export function createRenderer (options) {
         for(let i = 0; i < children.length; i += 1) {
             const el = children[i].el
             hostRemove(el)
+        }
+    }
+
+    function patchKeyedChildren(n1, n2, container, parent) {
+        console.log('patchKeyedChildren')
+        let i = 0
+        let e1 = n1.children.length - 1
+        let e2 = n2.children.length - 1
+
+        const c1 = n1.children
+        const c2 = n2.children
+
+        const isSameVNode = (n1, n2) => n1.type === n2.type && n1.key === n2.key
+
+        // 左端对比
+        while( i <= e1 && i<= e2 ) {
+            if (isSameVNode(c1[i], c2[i])) {
+                // 为什么需要patch，递归处理
+                patch(c1[i], c2[i], container, parent)
+            } else {
+                break
+            }
+            i++
+        }
+
+        // 右端对比
+        while( i <= e1 && i <= e2 ) {
+            if (isSameVNode(c1[e1], c2[e2])) {
+                patch(c1[e1], c2[e2], container, parent)
+            } else {
+                break
+            }
+            e1--
+            e2--
+        }
+
+        /* 
+         新的比老的多 右侧新增
+          ab
+          abcd 处理有问题
+        **/
+
+        if (i >= e1 && i <= e2) {
+            patch(null, c2[i], container, parent)
+        }
+
+        // 新的比老的多 左侧新增
+        if ( e1 < i && i <= e2) {
+            debugger
+            patch(null, c2[e2], container, parent)
         }
     }
 

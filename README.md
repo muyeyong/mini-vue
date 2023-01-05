@@ -99,4 +99,4 @@
    实现children对比： Array < -- > text 、  text < -- > text
 
  ## 2023-01-05
-   继续实现children对比
+   继续实现children对比： Array < -- > Array

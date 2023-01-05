@@ -9,6 +9,7 @@ export const createVnode = (type, props?, children?) => {
         type,
         props,
         children,
+        key: props?.key ?? null,
         shapeFlag: getShapeFlag(type),
         el: null,
     }
@@ -23,7 +24,6 @@ export const createVnode = (type, props?, children?) => {
         (ShapeFlags.STATEFUL_COMPONENT & vnode.shapeFlag) && 
         (isObject(vnode.children))
     ) {
-       
         vnode.shapeFlag |= ShapeFlags.SLOAT_CHILDREN
     }
     return vnode
