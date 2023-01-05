@@ -95,5 +95,8 @@
    实现props更新
    看children的对比视频： text <--> array ？
 
- ## 202-01-04
+ ## 2023-01-04
    实现children对比： Array < -- > text 、  text < -- > text
+
+ ## 2023-01-05
+   继续实现children对比

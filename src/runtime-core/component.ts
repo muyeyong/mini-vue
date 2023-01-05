@@ -8,7 +8,6 @@ import { publicInstanceProxyHandler } from "./publicComponentInstance"
 let currentInstance = null
 
 export function createComponentInstance(vnode: any, parent) {
-    console.log('createComponentInstance', parent)
    const instance =  {
         vnode,
         props: {},

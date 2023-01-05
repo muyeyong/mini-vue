@@ -5,7 +5,13 @@ import { createAppAPI } from "./createApp";
 import { Fragment, Text } from "./vnode";
 
 export function createRenderer (options) {
-    const { createElement: hostCreateElement, insert: hostInsert, patchProp: hostPatchProp} = options
+    const { 
+            createElement: hostCreateElement, 
+            insert: hostInsert, 
+            patchProp: hostPatchProp,
+            remove: hostRemove,
+            setElementText: hostSetElementText 
+        } = options
     
     function render(vnode, container) {
         patch(null, vnode, container)
@@ -71,6 +77,7 @@ export function createRenderer (options) {
         const newProps = n2.props
         const el = n2.el = n1.el 
         patchProps(oldProps, newProps, el)
+        patchChildren(n1, n2, el, container)
     }
 
     function patchProps(oldProps, newProps, el) {
@@ -88,6 +95,40 @@ export function createRenderer (options) {
             }
         }
        
+    }
+
+    function patchChildren(n1, n2, container, parent) {
+        // 对比孩子
+        console.log('patchChildren', n1, n2)
+        if (n1.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+            if (n2.shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+                 // Array -> Text
+                 //1. 删除n1 children
+                unmountChildren(n1)
+                //2. 添加n2 children
+                hostSetElementText(container, n2.children)
+            }
+        } else if (n1.shapeFlag & ShapeFlags.TEXT_CHILDREN) {
+            if (n2.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
+                // text -> Array
+                // 删除n1 children
+                hostSetElementText(container, '')
+                mountChildren(n2, container, parent)
+            } else {
+                if (n1.children !== n2.children) {
+                    hostSetElementText(container, n2.children)
+                }
+            }
+        }
+
+    }
+
+    function unmountChildren(vnode) {
+        const children = vnode.children
+        for(let i = 0; i < children.length; i += 1) {
+            const el = children[i].el
+            hostRemove(el)
+        }
     }
 
     function mountChildren(vnode: any, container: any, parent) {
@@ -111,6 +152,7 @@ export function createRenderer (options) {
             if (instance.isMounted) {
                 const { proxy, subTree: prevSubTree } = instance
                 const nextSubTree = instance.render.call(proxy)
+                instance.subTree = nextSubTree
                 patch(prevSubTree, nextSubTree, container, instance)
             } else {
                 const { proxy } = instance
@@ -128,10 +170,20 @@ export function createRenderer (options) {
     }
 
     function processText(n1, n2: any, container: any) {
+        if(!n1) {
+
+        } else {
+
+        }
         const { children } = n2
         const el = n2.el = document.createTextNode(children)
         container.append(el)
     }
+
+    function mountText() {
+
+    }
+
     return {
         createApp: createAppAPI(render)
     }

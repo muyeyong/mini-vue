@@ -2,9 +2,11 @@ import { h, ref } from '../../lib/mini-vue.es.js'
 export const App = {
     render() {
         //TODO 写在这里压根就不会去调用 proxyrefs ==> get， 为什么了？
+        //DOWN 
         const addCount = () => {
+            console.log('233', this)
             this.count = 2
-            console.log(this.count)
+            console.log('render...', this.count)
         }
         return  h(
             'div', 
@@ -30,6 +32,7 @@ export const App = {
         })
         const addCount = () => {
             count.value++
+            console.log('setup...', count.value)
         }
 
         const changePropsDemo1 = () => {

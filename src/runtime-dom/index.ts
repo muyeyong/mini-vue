@@ -23,7 +23,18 @@ import { createRenderer } from '../runtime-core'
      }
 }
 
-const render: any = createRenderer({ createElement, insert, patchProp})
+ function remove(child) {
+    const parent = child.parentNode
+    if (parent) {
+        parent.removeChild(child)
+    }
+ }
+
+ function setElementText(el, text) {
+    el.textContent = text
+ }
+
+const render: any = createRenderer({ createElement, insert, patchProp, remove, setElementText})
 
 
 export function createApp(...args) {
