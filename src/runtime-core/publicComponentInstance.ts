@@ -16,5 +16,10 @@ export const publicInstanceProxyHandler = {
         if(getterResult) {
             return getterResult(instance)
         }
-    }
+    },
+    // set({_: instance}, key, value) {
+    //     console.log(instance, key, value)
+    //     console.log(instance.setupState[key] = value)
+    //     return true
+    // }
 }

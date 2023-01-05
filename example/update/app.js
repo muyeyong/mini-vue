@@ -2,10 +2,11 @@ import { h, ref } from '../../lib/mini-vue.es.js'
 export const App = {
     render() {
         //TODO 写在这里压根就不会去调用 proxyrefs ==> get， 为什么了？
-        //DOWN 
+        //DOWN this.count 是去 instance的 proxy上去set 和 get, 其实可以在做到在render里面去修改setup的值 
+        // publicInstanceProxyHandler 修改这个的set
         const addCount = () => {
             console.log('233', this)
-            this.count = 2
+            this.count++
             console.log('render...', this.count)
         }
         return  h(
