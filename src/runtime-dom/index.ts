@@ -4,8 +4,10 @@ import { createRenderer } from '../runtime-core'
     return document.createElement(type)
 }
 
- function insert(el, container) {
-    container.append(el)
+ function insert(el, anchor, parent) {
+    // 将 parent.append(el) 改成可以插入指定位置 parent.insertBefore()
+    // parent.append(el)
+    parent.insertBefore(el, anchor)
 }
 
  function patchProp(el ,key, value) {
@@ -19,7 +21,6 @@ import { createRenderer } from '../runtime-core'
             } else {
                 el.setAttribute(key, value)
             }
-            
      }
 }
 

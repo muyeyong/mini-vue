@@ -16,29 +16,29 @@ import { h, ref } from '../../lib/mini-vue.es.js'
 // ]
 
 // 右侧新增
-// const preChildren = [
-//     h('div', { key: 'A' }, 'A'),
-//     h('div', { key: 'B' }, 'B'),
-// ]
-
-// const nextChildren = [
-//     h('div', { key: 'A' }, 'A'),
-//     h('div', { key: 'B' }, 'B'),
-//     h('div', { key: 'C' }, 'C'),
-//     h('div', { key: 'D' }, 'D')
-// ]
-
-// 左侧新增
 const preChildren = [
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
 ]
 
 const nextChildren = [
-    h('div', { key: 'C' }, 'C'),
     h('div', { key: 'A' }, 'A'),
     h('div', { key: 'B' }, 'B'),
+    h('div', { key: 'C' }, 'C'),
+    h('div', { key: 'D' }, 'D')
 ]
+
+// 左侧新增
+// const preChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+// ]
+
+// const nextChildren = [
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+// ]
 
 
 
