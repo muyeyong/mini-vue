@@ -189,7 +189,7 @@ export function createRenderer (options) {
 
         if ( i > e1 ) {
             if ( i <= e2 ) {
-                // 需要新增的情况，考虑往左侧还是右侧新增
+                // 需要新增的情况，考虑往左侧还是右侧新增,决定anchor的值
                 // i >= e1 + 1 // 右侧
                 // i <
                 const anchor = i + 1 > c2.length ? null : c2[i + 1].el // TODO 是否需要之前的锚点
@@ -198,13 +198,68 @@ export function createRenderer (options) {
                     i++
                 }
             }
-        } else {
+        } else if( i > e2) {
             if( i <= e1 ) {
                 while( i <= e1 ) {
                     hostRemove(c1[i].el, parentComponent)
                     i++
                 }
             }
+        } else {
+             /** 
+                中间对比：
+                    看旧的节点是否存在新的里面：1：使用for循环去遍历 2：将新的节点 s2 e2部分搜集成map结构，减少查询
+                    如果存在：位置不一致？
+                    如果不存在： 删除
+
+                优化：
+                    如果新节点全部遍历完了的话，老节点剩下的没有必要处理，直接删除
+
+             */
+            // debugger
+             const s1 = i
+             const s2 = i
+             const toPatched = e2 - s2 + 1
+             let patched = 0 
+             const newVNodeMap = new Map()
+             for( let i = s2; i <= e2 ; i += 1) {
+                newVNodeMap.set(c2[i].key, i)
+             }
+
+             for ( let i = s1; i <= e1; i += 1) {
+                if (patched === toPatched) {
+                    console.log('直接删除处理: ', c1[i])
+                    hostRemove(c1[i].el)
+                    continue
+                }
+                //TODO if else 里面的逻辑重复了
+                if (c1[i].key !== null && c1[i].key !== undefined) {
+                    const newChildIndex = newVNodeMap.get(c1[i].key)
+                    if (newChildIndex) { 
+                        // debugger
+                        /** TODO 位置变化怎么处理,  需要新的api
+                         *  1： c2去获取c2[newChildIndex]的兄弟节点
+                         *  2： c1中将c1[i]移动到1获取的兄弟节点之后
+                         *  这些都是dom操作？
+                        */
+                       // 这里只会更新props之类的，不会影响元素位置
+                        patch(c1[i], c2[newChildIndex], container, null, parentComponent)
+                        patched += 1
+                    } else {
+                        hostRemove(c1[i].el)
+                    }
+                } else {
+                    for (let j = s2; j <= e2; j += 1) {
+                        if (isSameVNode(c2[j], c1[i])) {
+                            patch(c1[i], c2[j], container, null, parentComponent)
+                            patched += 1
+                            break
+                        } else {
+                            hostRemove(c1[i].el)
+                        }
+                    }
+                }
+             }
         }
     }
 
