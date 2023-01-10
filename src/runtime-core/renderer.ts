@@ -198,6 +198,13 @@ export function createRenderer (options) {
                     i++
                 }
             }
+        } else {
+            if( i <= e1 ) {
+                while( i <= e1 ) {
+                    hostRemove(c1[i].el, parentComponent)
+                    i++
+                }
+            }
         }
     }
 
