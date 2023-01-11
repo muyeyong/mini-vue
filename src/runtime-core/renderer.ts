@@ -132,7 +132,6 @@ export function createRenderer (options) {
     }
 
     function patchKeyedChildren(n1, n2, container, parentComponent) {
-        console.log('patchKeyedChildren')
         let i = 0
         let e1 = n1.children.length - 1
         let e2 = n2.children.length - 1
@@ -164,34 +163,10 @@ export function createRenderer (options) {
             e2--
         }
 
-        /* 
-         新的比老的多 右侧新增
-          ab
-          abcd
-        **/
-
-        // if (i > e1 && i < e2) {
-        //      // 这里因该是一个while循环
-        //     patch(null, c2[i], container, null, parentComponent)
-        // }
-
-        /* 
-            新的比老的多 左侧新增
-            ab
-            cab
-        **/
-        // if ( i > e1 && i <= e2) {
-        //     // 这里因该是一个while循环
-        //     let anchorIndex = e2 + 1
-        //     const anchor = c2[anchorIndex].el // 需要变化
-        //     patch(null, c2[e2], container, anchor,  parentComponent)
-        // }
-
         if ( i > e1 ) {
             if ( i <= e2 ) {
                 // 需要新增的情况，考虑往左侧还是右侧新增,决定anchor的值
                 // i >= e1 + 1 // 右侧
-                // i <
                 const anchor = i + 1 > c2.length ? null : c2[i + 1].el // TODO 是否需要之前的锚点
                 while( i <= e2) {
                     patch(null, c2[i], container, anchor,  parentComponent)
@@ -222,8 +197,14 @@ export function createRenderer (options) {
              const toPatched = e2 - s2 + 1
              let patched = 0 
              const newVNodeMap = new Map()
+             // 需要对比的节点，新节点在老节点的位置对应
+             const newVNodeIndexMapOldVNodeIndex = Array.from()
              for( let i = s2; i <= e2 ; i += 1) {
                 newVNodeMap.set(c2[i].key, i)
+             }
+
+             for( let i = 0; i <= toPatched; i += 1) {
+                newVNodeIndexMapOldVNodeIndex[i] = -1
              }
 
              for ( let i = s1; i <= e1; i += 1) {
@@ -233,31 +214,56 @@ export function createRenderer (options) {
                     continue
                 }
                 //TODO if else 里面的逻辑重复了
+                let newChildIndex
+                // if (c1[i].key !== null && c1[i].key !== undefined) {
+                //     newChildIndex = newVNodeMap.get(c1[i].key)
+                //     if (newChildIndex !== undefined) { 
+                //         // debugger
+                //         /** TODO  2023-01-10
+                //          * 位置变化怎么处理,  需要新的api
+                //          *  1： c2去获取c2[newChildIndex]的兄弟节点
+                //          *  2： c1中将c1[i]移动到1获取的兄弟节点之后
+                //          *  这些都是dom操作？
+                //          * 
+                //          * 2023-01-11
+                //          * 1：用最长递增子序列计算出最少的移动
+                //          * 2：去操作dom
+                //         */
+                //        // 这里只会更新props之类的，不会影响元素位置
+                //         // patch(c1[i], c2[newChildIndex], container, null, parentComponent)
+                //         // patched += 1
+                //     } else {
+                //         hostRemove(c1[i].el)
+                //     }
+                // } else {
+                //     for (let j = s2; j <= e2; j += 1) {
+                //         if (isSameVNode(c2[j], c1[i])) {
+                //             // patch(c1[i], c2[j], container, null, parentComponent)
+                //             newChildIndex = j
+                //             // patched += 1
+                //             break
+                //         } else {
+                //             hostRemove(c1[i].el)
+                //         }
+                //     }
+                // }
+
+                //DOWN 2023-01-11 if else 提取重复的逻辑
                 if (c1[i].key !== null && c1[i].key !== undefined) {
-                    const newChildIndex = newVNodeMap.get(c1[i].key)
-                    if (newChildIndex) { 
-                        // debugger
-                        /** TODO 位置变化怎么处理,  需要新的api
-                         *  1： c2去获取c2[newChildIndex]的兄弟节点
-                         *  2： c1中将c1[i]移动到1获取的兄弟节点之后
-                         *  这些都是dom操作？
-                        */
-                       // 这里只会更新props之类的，不会影响元素位置
-                        patch(c1[i], c2[newChildIndex], container, null, parentComponent)
-                        patched += 1
-                    } else {
-                        hostRemove(c1[i].el)
-                    }
+                    newChildIndex = newVNodeMap.get(c1[i].key)
                 } else {
                     for (let j = s2; j <= e2; j += 1) {
                         if (isSameVNode(c2[j], c1[i])) {
-                            patch(c1[i], c2[j], container, null, parentComponent)
-                            patched += 1
+                            newChildIndex = j
                             break
-                        } else {
-                            hostRemove(c1[i].el)
-                        }
+                        } 
                     }
+                }
+                if (newChildIndex !== undefined) {
+                    patch(c1[i], c2[newChildIndex], container, null, parentComponent)
+                    patched += 1
+                } else {
+                    hostRemove(c1[i].el)
                 }
              }
         }
@@ -320,4 +326,46 @@ export function createRenderer (options) {
         createApp: createAppAPI(render)
     }
 }
+
+    function getSequence(arr: number[]): number[] {
+        const p = arr.slice();
+        const result = [0];
+        let i, j, u, v, c;
+        const len = arr.length;
+        for (i = 0; i < len; i++) {
+        const arrI = arr[i];
+        if (arrI !== 0) {
+            j = result[result.length - 1];
+            if (arr[j] < arrI) {
+            p[i] = j;
+            result.push(i);
+            continue;
+            }
+            u = 0;
+            v = result.length - 1;
+            while (u < v) {
+            c = (u + v) >> 1;
+            if (arr[result[c]] < arrI) {
+                u = c + 1;
+            } else {
+                v = c;
+            }
+            }
+            if (arrI < arr[result[u]]) {
+            if (u > 0) {
+                p[i] = result[u - 1];
+            }
+            result[u] = i;
+            }
+        }
+        }
+        u = result.length;
+        v = result[u - 1];
+        while (u-- > 0) {
+        result[u] = v;
+        v = p[v];
+        }
+        return result;
+    }
+    
 

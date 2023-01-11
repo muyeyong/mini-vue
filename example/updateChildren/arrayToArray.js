@@ -79,21 +79,17 @@ import { h, ref } from '../../lib/mini-vue.es.js'
 
 const preChildren = [
     h('div', { key: 'A' }, 'A'),
-    h('div', { key: 'B' }, 'B'),
-    h('div', { key: 'C' }, 'C'),
     h('div', { key: 'D', id: 'old-D' }, 'D'),
     h('div', { key: 'E' }, 'E'),
     h('div', { key: 'G' }, 'G'),
-    h('div', { key: 'H' }, 'H'),
     h('div', { key: 'K' }, 'K'),
     h('div', { key: 'F' }, 'F')
 ]
 
 const nextChildren = [
     h('div', { key: 'A' }, 'A'),
-    h('div', { key: 'B' }, 'B'),
-    h('div', { key: 'C' }, 'C'),
     h('div', { key: 'E' }, 'E'),
+    h('div', { key: 'K' }, 'K'),
     h('div', { key: 'D', id: 'new-D' }, 'D'),
     h('div', { key: 'F' }, 'F')
 ]

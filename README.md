@@ -102,4 +102,7 @@
    继续实现children对比： Array < -- > Array
  
  ## 2023-01-10
-   继续实现children对比： Array < -- > Array
+   继续实现children对比： Array < -- > Array、
+
+ ## 2023-01-11
+  最长递增子序列判断是否移动
