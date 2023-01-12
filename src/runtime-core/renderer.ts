@@ -98,7 +98,6 @@ export function createRenderer (options) {
 
     function patchChildren(n1, n2, container,  parentComponent) {
         // 对比孩子
-        console.log('patchChildren', n1, n2)
         if (n1.shapeFlag & ShapeFlags.ARRAY_CHILDREN) {
             if (n2.shapeFlag & ShapeFlags.TEXT_CHILDREN) {
                  // Array -> Text
@@ -191,26 +190,27 @@ export function createRenderer (options) {
                     如果新节点全部遍历完了的话，老节点剩下的没有必要处理，直接删除
 
              */
-            // debugger
              const s1 = i
              const s2 = i
              const toPatched = e2 - s2 + 1
              let patched = 0 
+             let prevIndex = -1
+             let move = false
              const newVNodeMap = new Map()
              // 需要对比的节点，新节点在老节点的位置对应
-             const newVNodeIndexMapOldVNodeIndex = Array.from()
-             for( let i = s2; i <= e2 ; i += 1) {
-                newVNodeMap.set(c2[i].key, i)
+             const newVNodeIndexMapOldVNodeIndex = Array(toPatched)
+             for( let j = s2; j <= e2 ; j += 1) {
+                newVNodeMap.set(c2[j].key, j)
              }
 
-             for( let i = 0; i <= toPatched; i += 1) {
-                newVNodeIndexMapOldVNodeIndex[i] = -1
+             for( let j = 0; j < newVNodeIndexMapOldVNodeIndex.length; j += 1) {
+                newVNodeIndexMapOldVNodeIndex[j] = -1
              }
 
-             for ( let i = s1; i <= e1; i += 1) {
+             for ( let j = s1; j <= e1; j += 1) {
                 if (patched === toPatched) {
-                    console.log('直接删除处理: ', c1[i])
-                    hostRemove(c1[i].el)
+                    console.log('直接删除处理: ', c1[j])
+                    hostRemove(c1[j].el)
                     continue
                 }
                 //TODO if else 里面的逻辑重复了
@@ -249,23 +249,57 @@ export function createRenderer (options) {
                 // }
 
                 //DOWN 2023-01-11 if else 提取重复的逻辑
-                if (c1[i].key !== null && c1[i].key !== undefined) {
-                    newChildIndex = newVNodeMap.get(c1[i].key)
+                if (c1[j].key !== null && c1[j].key !== undefined) {
+                    newChildIndex = newVNodeMap.get(c1[j].key)
                 } else {
                     for (let j = s2; j <= e2; j += 1) {
-                        if (isSameVNode(c2[j], c1[i])) {
+                        if (isSameVNode(c2[j], c1[j])) {
                             newChildIndex = j
                             break
                         } 
                     }
                 }
                 if (newChildIndex !== undefined) {
-                    patch(c1[i], c2[newChildIndex], container, null, parentComponent)
+                    //TODO 标记需不需要修改
+                    // 如果一直是递增的就不需要处理
+                    if ( newChildIndex > prevIndex && !move) {
+                        prevIndex = newChildIndex
+                    } else {
+                        move = true
+                    }
+                    newVNodeIndexMapOldVNodeIndex[newChildIndex - s2] = j
+                    patch(c1[j], c2[newChildIndex], container, null, parentComponent)
                     patched += 1
                 } else {
-                    hostRemove(c1[i].el)
+                    hostRemove(c1[j].el)
                 }
              }
+
+             // 得到最长递增子序列 [2, 4, 1] ==> [0, 1]
+             const longestIncrementSubsequence = move ? getSequence(newVNodeIndexMapOldVNodeIndex) : []
+             // 遍历新的
+
+             /**
+              * 为什么需要从后往前便利
+              * 跟移动的api有关 insertBefore,如果从前往后遍历，它的下一个节点可能也需要移动
+              * 如果从后往前遍历，就是往稳定的序列插入，不会遇到上述的问题
+              */
+             let k = longestIncrementSubsequence.length - 1
+            for (let j = toPatched - 1 ; j >= 0; j -= 1) {
+                const anchor = s2 + j + 1 < c2.length ?  c2[s2 + j + 1].el : null
+                if (newVNodeIndexMapOldVNodeIndex[j] === -1 ) {
+                    // 创建新的元素
+                    patch(null, c2[j + s2], container, anchor, parentComponent)
+                 } else if (move) {
+                    if (longestIncrementSubsequence[k] !== j || k < 0 ) {
+                        // 需要移动
+                        hostInsert(c2[j + s2].el, anchor, container)
+                    } else {
+                        // 不需要移动
+                        k--
+                   }
+                 }
+            }
         }
     }
 

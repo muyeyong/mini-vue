@@ -75,7 +75,7 @@ import { h, ref } from '../../lib/mini-vue.es.js'
 //     h('div', { key: 'F' }, 'F')
 // ]
 
-// 中间对比优化-新节点遍历完，旧节点直接删除
+// 中间对比优化-新节点遍历完，旧节点直接删除，新节点加入
 
 const preChildren = [
     h('div', { key: 'A' }, 'A'),
@@ -91,9 +91,30 @@ const nextChildren = [
     h('div', { key: 'E' }, 'E'),
     h('div', { key: 'K' }, 'K'),
     h('div', { key: 'D', id: 'new-D' }, 'D'),
+    h('div', { key: 'H' }, 'H'),
     h('div', { key: 'F' }, 'F')
 ]
 
+// 中间对比优化测试
+// const preChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'D' }, 'D'),
+//     h('div', { key: 'E' }, 'E'),
+//     h('div', { key: 'F' }, 'F')
+// ]
+
+// const nextChildren = [
+//     h('div', { key: 'A' }, 'A'),
+//     h('div', { key: 'K' }, 'K'),
+//     h('div', { key: 'B' }, 'B'),
+//     h('div', { key: 'C' }, 'C'),
+//     h('div', { key: 'D' }, 'D'),
+//     h('div', { key: 'E' }, 'E'),
+//     h('div', { key: 'J' }, 'J'),
+//     h('div', { key: 'F' }, 'F')
+// ]
 
 
 export const ArrayToArray = {
