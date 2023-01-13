@@ -9,7 +9,7 @@ export const App = {
             [ 
                 h('span', { class: 'blue'}, [h('p', { class: 'blue'}, `hello, ${this.count}`)]), 
                 h('button', { class: 'red', onClick: this.addCount }, '点击修改count'),
-                h(Child),
+                h(Child, { msg: this.props.foo }),
                 h('button', { onClick: this.changeProps }, '修改props, 影响Child'),
             ]
         )
@@ -34,10 +34,9 @@ export const App = {
 
 const Child = {
     render() {
-        return h('div', {}, 'Child')
+        return h('div', {}, `props: ${this.msg}`)
     }, 
     setup(props) {
-        console.log(props)
         return { props }
     }
 }

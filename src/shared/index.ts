@@ -13,3 +13,10 @@ export const camelize = (str: string) => {
         return  c.toLocaleUpperCase()
     })
 }
+
+export const objChange = (oldObj, newObj) => {
+    for (let key in newObj) {
+        if (newObj[key] !== oldObj[key]) return true
+    }
+    return false
+}

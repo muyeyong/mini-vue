@@ -18,7 +18,11 @@ export function createComponentInstance(vnode: any, parent) {
         parent,
         slots: null,
         isMounted: false,
-        subTree: null
+        subTree: null,
+        // effect的返回值
+        update: null,
+        // 下一个需要更新的节点
+        nextVNode: null
     }
     instance.emit = emit.bind(null, instance) as any
     return instance
