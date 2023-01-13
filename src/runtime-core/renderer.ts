@@ -50,7 +50,7 @@ export function createRenderer (options) {
         if (!n1) {
             mountElement(n2, container, anchor, parentComponent)
         } else {
-            patchElement(n1, n2,  container)
+            patchElement(n1, n2, parentComponent)
         }
     }
 
@@ -71,12 +71,12 @@ export function createRenderer (options) {
         hostInsert(el, anchor, container)
     }
 
-    function patchElement(n1, n2, container) {
+    function patchElement(n1, n2, parentComponent) {
         const oldProps = n1.props
         const newProps = n2.props
         const el = n2.el = n1.el 
         patchProps(oldProps, newProps, el)
-        patchChildren(n1, n2, container, el)
+        patchChildren(n1, n2, el, parentComponent)
     }
 
     function patchProps(oldProps, newProps, el) {
@@ -93,7 +93,6 @@ export function createRenderer (options) {
                 }
             }
         }
-       
     }
 
     function patchChildren(n1, n2, container,  parentComponent) {
