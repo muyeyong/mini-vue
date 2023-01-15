@@ -3,6 +3,7 @@ import { objChange } from "../shared";
 import { ShapeFlags } from "../shared/shapeFlags"
 import { createComponentInstance, setupComponent } from "./component"
 import { createAppAPI } from "./createApp";
+import { schedulerJob } from "./shcheduler";
 import { Fragment, Text } from "./vnode";
 
 export function createRenderer (options) {
@@ -28,7 +29,6 @@ export function createRenderer (options) {
             }
         不需要这样做，会创造出过多的dom节点
         **/
-        
         const { type } = n2
         switch (type) {
             case Fragment:
@@ -73,6 +73,7 @@ export function createRenderer (options) {
     }
 
     function patchElement(n1, n2, parentComponent) {
+        console.log('patchElement',  n1, n2)
         const oldProps = n1.props
         const newProps = n2.props
         const el = n2.el = n1.el 
@@ -358,6 +359,11 @@ export function createRenderer (options) {
                 instance.vnode.el = nextSubTree.el
                 instance.subTree = nextSubTree
                 instance.isMounted = true
+            }
+        }, {
+            scheduler() {
+                // console.log('scheduler')
+                schedulerJob(instance.update)
             }
         })
     }
