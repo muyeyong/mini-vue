@@ -90,6 +90,7 @@
  ## 2022-12-30
   实现vnode更新
   TODO 单测怎么跑不起来了
+  DOWN bable.config.js --> bable.config.json解决
 
  ## 2023-01-03
    实现props更新
@@ -113,3 +114,7 @@
 
  ## 2023-01-15
   实现异步更新 && nextTick : 主要是用微任务解决
+
+ ## 2023-01-16
+  实现template解析：{{message}} element
+  在实现一个函数的时候，先写出他的功能，然后在进行函数拆分
