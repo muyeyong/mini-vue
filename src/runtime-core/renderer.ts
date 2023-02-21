@@ -175,6 +175,9 @@ export function createRenderer (options) {
             }
         } else if( i > e2) {
             if( i <= e1 ) {
+                /**
+                 * 出现这种情况说明将新的虚拟节点全部遍历完了，剩下没遍历的老节点全部删除就可以了
+                 */
                 while( i <= e1 ) {
                     hostRemove(c1[i].el, parentComponent)
                     i++
@@ -200,15 +203,18 @@ export function createRenderer (options) {
              const newVNodeMap = new Map()
              // 需要对比的节点，新节点在老节点的位置对应
              const newVNodeIndexMapOldVNodeIndex = Array(toPatched)
+             // 新节点自身位置记录
              for( let j = s2; j <= e2 ; j += 1) {
                 newVNodeMap.set(c2[j].key, j)
              }
 
+             //初始化，-1代表新节点不存在老节点立面，直接新建就可以了
              for( let j = 0; j < newVNodeIndexMapOldVNodeIndex.length; j += 1) {
-                newVNodeIndexMapOldVNodeIndex[j] = -1
+                newVNodeIndexMapOldVNodeIndex[j] = -1 
              }
 
              for ( let j = s1; j <= e1; j += 1) {
+                // 混乱的节点全部处理完了
                 if (patched === toPatched) {
                     console.log('直接删除处理: ', c1[j])
                     hostRemove(c1[j].el)
@@ -250,6 +256,7 @@ export function createRenderer (options) {
                 // }
 
                 //DOWN 2023-01-11 if else 提取重复的逻辑
+                // if else 获取老节点在新节点中的位置
                 if (c1[j].key !== null && c1[j].key !== undefined) {
                     newChildIndex = newVNodeMap.get(c1[j].key)
                 } else {
@@ -266,12 +273,15 @@ export function createRenderer (options) {
                     if ( newChildIndex > prevIndex && !move) {
                         prevIndex = newChildIndex
                     } else {
+                        // 老节点在新节点中的相对位置变了，需要进行最长子序列处理
                         move = true
                     }
+                    // 新节点对应老节点的位置
                     newVNodeIndexMapOldVNodeIndex[newChildIndex - s2] = j
                     patch(c1[j], c2[newChildIndex], container, null, parentComponent)
                     patched += 1
                 } else {
+                    // 老节点不存在在新节点中
                     hostRemove(c1[j].el)
                 }
              }
